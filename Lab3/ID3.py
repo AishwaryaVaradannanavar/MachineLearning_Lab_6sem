@@ -2,9 +2,12 @@ import pandas as pd
 import math
 import numpy as np
 
-data = pd.read_csv("3-dataset.csv")
+data = pd.read_csv('weather.csv')
 features = [feat for feat in data]
-features.remove("answer")
+features.remove('answer')
+print(data)
+print(features)
+
 
 class Node:
     def __init__(self):
@@ -29,17 +32,19 @@ def entropy(examples):
         return -(p * math.log(p, 2) + n * math.log(n, 2))
 
 def info_gain(examples, attr):
-    uniq = np.unique(examples[attr])
-    #print ("\n",uniq)
     gain = entropy(examples)
-    #print ("\n",gain)
+    print ("\n",attr,"gain =",gain)
+    uniq = np.unique(examples[attr])
+    
+    
     for u in uniq:
         subdata = examples[examples[attr] == u]
-        #print ("\n",subdata)
+        #print ("\n subdata = \n",subdata)
         sub_e = entropy(subdata)
         gain -= (float(len(subdata)) / float(len(examples))) * sub_e
-        #print ("\n",gain)
+        print ("\n ",u,"gain =",gain)
     return gain
+
 
 def ID3(examples, attrs):
     root = Node()
@@ -53,11 +58,11 @@ def ID3(examples, attrs):
             max_gain = gain
             max_feat = feature
     root.value = max_feat
-    #print ("\nMax feature attr",max_feat)
+    print ("\nMax feature attr",max_feat)
     uniq = np.unique(examples[max_feat])
-    #print ("\n",uniq)
+    print ("\n",uniq)
     for u in uniq:
-        #print ("\n",u)
+        print ("\n",u)
         subdata = examples[examples[max_feat] == u]
         #print ("\n",subdata)
         if entropy(subdata) == 0.0:
@@ -76,6 +81,7 @@ def ID3(examples, attrs):
             root.children.append(dummyNode)
     return root
 
+
 def printTree(root: Node, depth=0):
     for i in range(depth):
         print("\t", end="")
@@ -85,6 +91,8 @@ def printTree(root: Node, depth=0):
     print()
     for child in root.children:
         printTree(child, depth + 1)
+
+
 
 root = ID3(data, features)
 printTree(root)
