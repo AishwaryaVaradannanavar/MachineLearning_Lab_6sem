@@ -33,6 +33,8 @@ class NaiveBayesClassifier:
             else:
                 self.output_dom[self.y[i]] += 1
             self.data.append([self.X[i], self.y[i]])
+        print(f"LISTED ATTRIBUTES-- {self.attrs}")  
+        print(f"LISTED TARGET VALUES AND COUNT-- {self.output_dom}") 
     def classify(self, entry):
         solve = None 
         max_arg = -1
